@@ -1,39 +1,39 @@
 // Singly Linked List
 class Node {
   constructor(data) {
-    this.data = data;
-    this.next = null;
+    this.data = data;   // Value of the node
+    this.next = null;   // Reference to the next node in the list
   }
 }
 
 class SinglyLinkedList {
-  constructor() {      // doesn't need arguments
-    this.head = null;  // no nodes upon construction
-    this.tail = null;
-    this.length = 0;
+  constructor() {
+    this.head = null;    // Points to the first node in the list
+    this.tail = null;    // Points to the last node in the list
+    this.length = 0;     // Number of nodes in the list
   }
 
-  // push()- add node to end of list O(1)
+  // Add a new node to the end of the list (O(1))
   push(data) {
     let newNode = new Node(data);
-    if (!this.head) {              // add 1st node to empty singly linked list
-        this.head = newNode;       // its both the head and tail
-        this.tail = newNode;       // since n = 1
-    } else {                       // if greater than 1
-      this.tail.next = newNode;    // set tail to next node
-      this.tail = newNode;         // the new node is the tail           
+
+    if (!this.head) {    // If the list is empty, the new node is both the head and the tail
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail.next = newNode;  // Set the next reference of the current tail to the new node
+      this.tail = newNode;       // Update the tail to be the new node
     }
-    this.length++;                // like before increment by 1
-    return this;                  // return linked list
+
+    this.length++;  // Increment the length of the list
+    return this;    // Return the linked list
   }
 
-  // pop- remove end/tail of linked list.
-  // No backwards pointer, so we need to go thru linked list 
-  // to get new tail. O(n)
+  // Remove and return the last node in the list (O(n))
   pop() {
-    if (this.length === 0) return undefined; // if list is empty aka no head
-    
-    if (this.length === 1) {                // if only one node
+    if (this.length === 0) return undefined;  // If the list is empty, return undefined
+
+    if (this.length === 1) {   // If there is only one node, remove it and update head and tail
       let currentNode = this.head;
       this.head = null;
       this.tail = null;
@@ -41,149 +41,137 @@ class SinglyLinkedList {
       return currentNode;
     }
 
-    let prevNode = null;                  // prevNode needed later to set to tail
-    let currentNode = this.head;          // start at head
+    let prevNode = null;      // Previous node needed later to set to the tail
+    let currentNode = this.head;
 
-    while (currentNode.next !== null) {   // while don't pass the tail
-      prevNode = currentNode;             // move the node forward
+    while (currentNode.next !== null) {  // Traverse the list until the tail is reached
+      prevNode = currentNode;
       currentNode = currentNode.next;
     }
-    this.tail = prevNode;                 // set tail to prevNode 
-    this.tail.next = null;                // new tail points to null
+
+    this.tail = prevNode;      // Set the tail to the previous node
+    this.tail.next = null;     // Update the new tail's next reference to null
     this.length--;
-    return currentNode;                   // return popped off node
+
+    return currentNode;        // Return the popped off node
   }
 
-  // shift- remove head from linked list and return it.
-  // 2nd item become head. O(1)
+  // Remove and return the first node in the list (O(1))
   shift() {
-    if (!this.head) return undefined;  // if no head, then can't shift.
+    if (!this.head) return undefined;  // If the list is empty, return undefined
 
     let removedHead = this.head;
-    this.head = this.head.next;
-    // removedHead.next = null;  garbage collecting in js cleans up, b/c old head will not be used.
+    this.head = this.head.next;        // Update the head to be the next node
     this.length--;
-    if (this.length === 0) {    // no elements after operation?
-      this.tail = null;         // set tail to null to avoid it being populated w/ last item
+
+    if (this.length === 0) {           // If no elements are left after the operation
+      this.tail = null;                // Set the tail to null to avoid it being populated with the last item
     }
+
     return removedHead;
   }
 
-  // add new head to list- O(1)
+  // Add a new head to the list (O(1))
   unshift(data) {
-    if (data === undefined) return undefined; // if not handled, will increment when nothing passed
+    if (data === undefined) return undefined;  // If no data is provided, return undefined
 
     let newNode = new Node(data);
-    if (!this.head) {             // if no head aka length equals 0
+
+    if (!this.head) {                // If the list is empty, the new node is both the head and the tail
       this.head = newNode;
       this.tail = newNode;
     } else {
-      newNode.next = this.head;     // set new node pointer to head
-      this.head = newNode;          // set new node as head
+      newNode.next = this.head;     // Set the new node's next reference to the current head
+      this.head = newNode;          // Update the head to be the new node
     }
-    this.length++;                  // +1 since new item
-    return this;                    // return linked list
+
+    this.length++;                  // Increment the length of the list
+    return this;                    // Return the linked list
   }
 
-  // retrieve node by its position in linked list- O(n)
+  // Retrieve a node by its position in the list (O(n))
   get(index) {
     if (typeof index !== 'number') return null;
-    if (index > this.length - 1 || index < 0 ) return -1;  // handle out of range index 
-    if (index === 0) return this.head;                     // return head if 0
-    if (index === this.length - 1 ) return this.tail;      // avoid loop to get to tail.
+    if (index > this.length - 1 || index < 0) return -1;  // Handle out-of-range index
 
-    let counter = 0;              // 0 based index
-    let currentNode = this.head;  // start off at head
+    if (index === 0) return this.head;                    // Return the head if the index is 0
+    if (index === this.length - 1) return this.tail;      // Return the tail to avoid looping to get to the tail
+
+    let counter = 0;                  // 0-based index
+    let currentNode = this.head;      // Start off at the head
+
     while (counter !== index) {
       currentNode = currentNode.next;
       counter++;
     }
-    return currentNode;         // bounded by top if statement, so will be found in range
+
+    return currentNode;               // Bounded by the top if statement, so it will be found in range
   }
 
-  // retrieve node by its position in linked list- O(n)
-  set (index, data) {
-    if (data === undefined) return undefined;    // needs data input
+  // Set the data of a node at a specific position in the list (O(n))
+  set(index, data) {
+    if (data === undefined) return undefined;  // If no data is provided, return undefined
 
     let foundNode = this.get(index);
     if (foundNode) {
-      foundNode.data = data;  // Pro tip: easier if you update data prop inside node 
-      return true;            // instead of having to replace node 
+      foundNode.data = data;  // Update the data property inside the node
+      return true;
     }
+
     return false;
   }
 
-  // adding a new node at specified position in linked list
-  // O(n) to traverse, O(1) to insert
-  // array is O(n) to insert (needs re-indexing), O(1) to access
+  // Insert a new node at a specified position in the list (O(n))
   insert(index, data) {
-    if (data === undefined) return undefined;             // needs data input
-    if (index < 0 || index > this.length) return false;   // handle out of bounds
-    if (index === 0) return !!this.unshift(data);         // if head add to front. !! creates boolean that is returned
-    if (index === this.length) return !!this.push(data);  // if beyond tail, added to end
+    if (data === undefined) return undefined;           // If no data is provided, return undefined
+    if (index < 0 || index > this.length) return false;  // Handle out-of-bounds index
 
-    let newNode = new Node(data);                       // inserting between head and tail 
-    let prevNode = this.get(index - 1);                 // get previous node in index to link to newNode
-    let currentNode = prevNode.next;                    // current node in index
-    prevNode.next = newNode;                            // prevNode -> newNode
-    newNode.next = currentNode;                         // newNode -> currentNode, 
+    if (index === 0) return !!this.unshift(data);        // If the index is 0, add to the front (returning a boolean)
+
+    if (index === this.length) return !!this.push(data);  // If the index is beyond the tail, add to the end (returning a boolean)
+
+    let newNode = new Node(data);
+    let prevNode = this.get(index - 1);                 // Get the previous node in the index to link to newNode
+    let currentNode = prevNode.next;                    // Current node in the index
+    prevNode.next = newNode;                            // Set prevNode's next reference to newNode
+    newNode.next = currentNode;                         // Set newNode's next reference to currentNode
     this.length++;
-    return true;                                        // so prevNode -> newNode -> currentNode
+
+    return true;                                       // Return true after successfully inserting the node
   }
-  // remove and return element based on its index position- O(n)
+
+  // Remove and return a node based on its index position in the list (O(n))
   remove(index) {
-    if (index < 0 || index >= this.length) return false;  // if out of range -> false
-    if (index === 0) return this.shift();                 // if heads. !! turns value into boolean
-    if (index === this.length - 1) return this.pop();     // if tail. 
-    
-    let prevNode = this.get(index - 1);                   // Get node before index, since we don't have backwards pointer
-    let removedNode = prevNode.next;                      // get target node to return
-    prevNode.next = prevNode.next.next;                   // remove node by skipping over target. Set prev to node after target index. 
-    this.length--;                                        // prevNode -> prevNode.next.next (skipped target)
-    return removedNode;
+    if (index < 0 || index >= this.length) return false;  // If out of range, return false
+    if (index === 0) return this.shift();                 // If it's the head, shift the list
+    if (index === this.length - 1) return this.pop();     // If it's the tail, pop the list
+
+    let prevNode = this.get(index - 1);                   // Get the node before the index
+    let removedNode = prevNode.next;                      // Get the target node to return
+    prevNode.next = prevNode.next.next;                   // Remove the node by skipping over it
+    this.length--;
+
+    return removedNode;                                  // Return the removed node
   }
-  // reverse linked list in place- O(n)
-  // no copy or duplicate made- traverse and reverse
-  // insert head node between tail and node right after tail len - 1 times.
-  altReverse(){
-    if (this.length <= 1) return this; // corner case of 1 or less times
-    if (this.length === 2) {          // corner case of 2 items only
-      this.push(this.shift());        // take head and push to end of list
-      return this;                    // needed to avoid logic error below since only 2 times
-    }
-    let counter = 0; 
-    let newTail = this.head           // take old head and turn to new tail
-    let anchorNode = this.tail;       // start postion to insert
-    let prevNode = null;              // end position to insert
-    let movedNode = null;             // node to be inserted betwen start and end
-    while (counter < this.length - 1) {
-      movedNode = this.shift();       // remove head
-      anchorNode.next = movedNode;    // add after tail/anchor node
-      movedNode.next = prevNode;      // add to node right after it, aka sandwich it in middle
-      prevNode = movedNode;           // will be new end position to insert movedNode before.
-      counter++;
-      this.length++;                  // needed to counter reduction of length with shift
-    }
-    this.tail = newTail;
-    return this;
-  }
-  // alternative way to do reverse
-  // basically flipping pointer backwards by setting .next to prev
-  // and moving forward by moving prev and node thru each node
+
+  // Reverse the linked list in place (O(n))
   reverse() {
-    let node = this.head;     // switch head and tail nodes
+    let node = this.head;     // Switch head and tail nodes
     this.head = this.tail;
     this.tail = node;
+
     let next = null;
-    let prev = null;          // tail needs to be null at the end
+    let prev = null;          // Tail needs to be null at the end
+
     for (let i = 0; i < this.length; i++) {
       next = node.next;
       node.next = prev;
-      prev = node;            // move one node over
+      prev = node;            // Move one node over
       node = next;
     }
   }
-  // dev helper method to visualize linked list
+
+  // Dev helper method to visualize the linked list
   print() {
     let arr = [];
     let current = this.head;
@@ -197,58 +185,58 @@ class SinglyLinkedList {
 
 /*
   Overview:
-  Insertion/Removal: 
+  Insertion/Removal:
     Best: O(1)
     Worst: O(N)
-    Note, act of inserting/removing is O(1)
-    but still needs to traverse to find node, so O(N).
+    Note, the act of inserting/removing is O(1)
+    but still needs to traverse to find a node, so O(N).
   Searching/Access:
     Best: O(1)
     Worst: O(N)
 
   Recap:
-  Singly Linked Lists are excellent alternative to arrays 
+  Singly Linked Lists are an excellent alternative to arrays 
   when inserting or deleting at the beginning or end 
   is frequent.
 
-  The idea of list data structure that consists of nodes
+  The idea of a list data structure that consists of nodes
   is the foundation for other data structures like 
-  Stack and Queues.
+  Stacks and Queues.
 
-  Arrays contain a built in index, since the entire array
-  is placed together in memory. 
+  Arrays contain a built-in index since the entire array
+  is placed together in memory.
 
   Because of this, the computer has to specify the amount
   of space needed upfront. In JavaScript, this is done behind the scenes.
 
-  However, because of this arrays allow for random access, 
-  so one can get nth element in constant time, O(1).
+  However, because of this, arrays allow for random access, 
+  so one can get the nth element in constant time, O(1).
 
   If we need more than what was allocated, we have to copy 
   the entire array and place it into another array with more space.
-  Thats O(n) time.
+  That's O(n) time.
 
   If we remove an element from the beginning of an array, 
   we have to re-index the entire array.
   This takes O(n) time.
-  Again JavaScript does this behind the scenes for us.
+  Again, JavaScript does this behind the scenes for us.
 
   Arrays are good for when you know how much data you will
   have upfront or need random access in constant time.
 
-  Both Singly and Doubly Linked Lists don't need specific
-  chunk of memory upfront. Instead they can grow dynamically,
+  Both Singly and Doubly Linked Lists don't need a specific
+  chunk of memory upfront. Instead, they can grow dynamically,
   without the need to re-allocate memory.
 
   The downside is that to get to anything besides the head or tail,
-  requires traversing the linked list which is O(n).
+  requires traversing the linked list, which is O(n).
 
   Getting the head or tail is constant time O(1).
 
-  Adding to beginning or end of linked list is O(1)
+  Adding to the beginning or end of the linked list is O(1).
 
-  Adding/removing elements into middle of Linked Lists is O(1),
-  but since no random access to search, it is and additional O(n).
+  Adding/removing elements into the middle of Linked Lists is O(1),
+  but since no random access to search, it is an additional O(n).
 */
 
 const list = new SinglyLinkedList();
@@ -260,10 +248,3 @@ list.print();
 list.reverse();
 list.print();
 console.log(list);
-
-
-// not efficent way to write linked list
-// let firstNode = new Node("Hi");
-// firstNode.next = new Node("there");
-// firstNode.next.next = new Node("friendly");
-// firstNode.next.next.next = new Node("person");
