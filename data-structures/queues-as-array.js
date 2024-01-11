@@ -1,159 +1,115 @@
-// queues- as array
+// Queues implemented as an array.
+
 const queue = [];
-queue.push("first");  // enqueue- add to tail
+queue.push("first");  // Enqueue - add to tail
 queue.push("second");
 queue.push("third");
 
-queue.shift();  // dequeue- remove from front
-queue.shift();  // removing from front of array re-indexes array- O(n), not good
+queue.shift();  // Dequeue - remove from front
+queue.shift();  // Removing from the front of the array re-indexes the array, O(n), 
+                // not efficient
 queue.shift();
 
-queue.unshift("first");  // add to front- still re-indexing entire queue- O(n0)
-queue.unshift("second");  // no way around this using array
-queue.unshift("third");  // perhaps turning value to null, and having variable that holds current head.
+queue.unshift("first");  // Add to front - still re-indexing entire queue, O(n)
+queue.unshift("second");  // No efficient way to avoid re-indexing using array
+queue.unshift("third");  // Perhaps turning values to null and having a variable that 
+                        // holds the current head.
 
-queue.pop();  // dequeue- remove from back
+queue.pop();  // Dequeue - remove from back
 queue.pop(); 
 queue.pop();  
 
 /*
-Queues ADT
-A list or colleciton with the restriction that 
-insertion must be performed at rear and 
+Queue Abstract Data Type (ADT):
+A list or collection with the restriction that 
+insertion must be performed at the rear, and 
 deletion must be performed at the front.
 
-A queue is basically a line. The first person in is the 
+A queue is essentially a line. The first person in is the 
 first person served/leaves.
 
-FIFO principle- first in, first out.
+FIFO Principle - First In, First Out.
 
 Methods:
-all methods are O(1)
-enqueue()- add to back/tail
-dequeue()- remove and return from head
-front/peak()- return head, but don't remove
-isEmpty()- check if empty 
+- enqueue(): Add to the rear/tail.
+- dequeue(): Remove and return from the head.
+- front/peek(): Return the head without removing it.
+- isEmpty(): Check if empty.
 
-Queue essentials:
+Queue Essentials:
 Enqueue and dequeue are essential for a queue. 
-Elements must be added from rear and removed from front.
+Elements must be added from the rear and removed from the front.
 
-           -------
-Enqueue ->          Dequeue ->
-           -------
+    Enqueue ->          Dequeue ->
+    -------
 
-Most of the time languages already have implementations 
-of queue. JS doesn't have one.
+Most languages have built-in queue implementations, but JavaScript does not.
 
 Uses:
 Used in scenarios where there is a shared resource, 
 but the resource can only handle one request at a time.
+The first request that comes in gets served first.
 
-The request that comes first, gets served first.
-
-Used in printer jobs, processor for computer,
-network requests, scheduling, 
+Used in printer jobs, processor for computers,
+network requests, scheduling,
 web servers processing requests,
-in JS for how functions are executed.
+and in JavaScript for how functions are executed.
 
 Web servers have a request queue that handles 
 the lifecycle of the request: 
--incoming request queue
--processing request queue
--outgoing request queue
+- Incoming request queue
+- Processing request queue
+- Outgoing request queue
 
-In OS, has multi-level priority queue, 
-which schedules processes to be divided up 
-based on priority order, 
-and then for queues to be executed based 
-their level of importance.
+In operating systems, there is a multi-level priority queue, 
+which schedules processes based on their priority order, 
+and then queues are executed based on their level of importance.
 
 Similar to Stacks:
-stack.push() -> queue.enqueue()
-stack.pop() -> queue.dequeue()
-stack.size() -> queue.size()
-stack.isEmpty() -> queue.isEmpty()
+- stack.push() -> queue.enqueue()
+- stack.pop() -> queue.dequeue()
+- stack.size() -> queue.size()
+- stack.isEmpty() -> queue.isEmpty()
 
 Implementation:
-Array-
-Depending on situation, can be bad implementation tool.
-Can run out of memory if we don't know size of queue before hand.
-As array goes, time complexity of accessing and removing elements 
-increases. Adding to the front also means re-indexing everything. 
-That would create an O(n). 
+Array -
+Depending on the situation, an array can be a suboptimal implementation tool.
+It can run out of memory if we don't know the size of the queue beforehand.
+As the array grows, the time complexity of accessing and removing elements 
+increases. Adding to the front also means re-indexing everything, resulting in O(n).
 
-one verison of Pseudo code:- All O(1)
-Have markers front and rear on array.
-To add increment rear by 1. add element to rear of array
-To remove, increment front by 1. remove element at front of array.
-Front and rear are initally -1.
-ifEmpty, front and rear === -1 ? true : false
-enqueue(x), 
-  if rear == size -1, queue full, exit
-  else if isEmpty, front <- rear <- 0
-  else rear <- rear + 1
-  A[rear] <- x
-dequeue(x),
-  if isEmpty, return 
+Pseudocode for Array Implementation:
+Have markers front and rear on the array.
+To add, increment rear by 1 and add the element to the rear of the array.
+To remove, increment front by 1 and remove the element at the front of the array.
+Front and rear are initially -1.
+IfEmpty: front and rear === -1 ? true : false.
+enqueue(x):
+  if rear == size - 1, queue full, exit.
+  else if isEmpty, front <- rear <- 0.
+  else rear <- rear + 1.
+  A[rear] <- x.
+dequeue(x):
+  if isEmpty, return.
   else if front == rear, (only one element)
-    front <- rear <-  -1
-  else, 
-    front <- front + 1
-  (remove element?)
+    front <- rear <-  -1.
+  else,
+    front <- front + 1.
+Circular Array:
+Next position: (i + 1) % number of elements in the array.
+Previous position: (i + n - 1) % n.
 
-The problem with array is that the more we dequeue,
-the less cells in queue we have to work with.
-We would have to reindex the array from front 
-if we need to use it, which is O(n)
+Linked List -
+A better implementation since resizing happens dynamically, 
+and they do not have a fixed size.
+Maintaining references to opposite ends of the queue makes 
+enqueue and dequeue operations easier, resulting in O(1).
 
-Or we would have to use a circular array.
-0 -> n -> 0. So circular.
-
-To make circular array:
-next position: (i + 1) % number of elements in array
-for any element not i = n - 1, the modulo
-won't have any effect.
-For i = n - 1, it will reset to i = 0. 
-
-previous position: (i + n - 1) % n.
-+n makes it always positive.
-
-With circular arrary we can increment rear
-as long as there is space.
-
-Implementation with circular array- All O(1)
-Front and rear are initally -1.
-ifEmpty, front and rear === -1 ? true : false
-enqueue(x), 
-  if (rear + 1) % size of array == front,
-    queue full so, exit, return
-  else if isEmpty, front <- rear <- 0
-  else rear <- (rear + 1) % size of array
-  A[rear] <- x
-dequeue(x),
-  if isEmpty, return 
-  else if front == rear, (only one element)
-    front <- rear <-  -1
-  else, 
-    front <- (front + 1) % size of array
-  (remove element?)
-front()
-  return A[front]
-
-Linked list-
-Better implementation since re-sizing happens dynamically,
-since they do not have a fixed size.
-Maintaining refereces to opposite ends of queue 
-makes enqueue and dequeue easier. This creates an O(1). 
-
-Arrays have a fixed size of memory and if unfilled, 
-goes wasted and unable to be used by the rest of the
-computer. Linked Lists avoid this, since only the memory
-that is used is allocated to it.
-
-Better to add at tail, and remove at head.
-If we keep a reference to the tail, we can just 
-append to tail and the node points to null.
-If we remove or dequeue from front, all we 
-do is reset the head to next element.
+Arrays have a fixed size of memory, and if unfilled, 
+the memory goes wasted and cannot be used by the rest of the computer. 
+Linked Lists avoid this since only the memory that is used is allocated to it.
+It's better to add at the tail and remove at the head.
+If we keep a reference to the tail, we can simply append to the tail,
+and the node points to null. If we remove or dequeue from the front,
+all we do is reset the head to the next element.
 */
