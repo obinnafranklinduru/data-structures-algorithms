@@ -1,17 +1,20 @@
+// Class definition for representing students with their information and actions.
 class Student {
+  // Constructor to initialize a new student with firstName, lastName, and grade.
   constructor(firstName, lastName, grade) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.grade = grade;
-    this.timesLate = 0;
-    this.scores = [];
+    this.timesLate = 0; // Initialize the count of times a student has been late.
+    this.scores = []; // Initialize an empty array to store scores.
   }
 
-  // instance methods
+  // Instance method: Return the full name of the student.
   fullName() {  
     return `Your full name is ${this.firstName} ${this.lastName}`;
   }
 
+  // Instance method: Mark a student as late and check for expulsion if late three or more times.
   markLate() {
     this.timesLate += 1;
     if(this.timesLate >= 3) {
@@ -20,26 +23,29 @@ class Student {
     return `${this.firstName} ${this.lastName} has been late ${this.timesLate} time(s).`
   }
 
+  // Instance method: Calculate the average score of the student.
   calculateAverage() {
     const sum = this.scores.reduce((a,b) => a+b);
     return sum / this.scores.length;
   }
 
-  // setter- interface to change data
+  // Setter method: Add a new score to the student's scores array.
   addScore(score) {
     this.scores.push(score);
     return this.scores;
   }
 
-  // class method
+  // Class method: A static method to enroll students, takes any number of students as arguments.
   static enrollStudents(...students) {
     return "Enrolling Students"; 
   }
 }
 
-let firstStudent = new Student('Desi', 'Arnaz', 12);
-let secondStudent = new Student('Juan', 'Peron', 11);
+// Instantiate two students with their details.
+let firstStudent = new Student('Obinna', 'Duru', 12);
+let secondStudent = new Student('Franklin', 'Duru', 11);
 
+// Demonstrate usage of various methods and properties of the Student class.
 console.log(firstStudent.fullName());
 console.log(secondStudent.fullName());
 
@@ -53,51 +59,26 @@ console.log(secondStudent.calculateAverage());
 
 console.log(Student.enrollStudents());
 
-// overview of class 
+// Overview of class structure for a generic data structure.
 class DataStructure {
   constructor(setupData) {
-    // what default properties should it have?
+    // Default property to store setup data for the data structure.
     this.setupData = setupData;
   }
+
+  // Instance method: Return the setup data of the data structure.
   someInstanceMethod() {
-    // what should each instance be able to do 
-    return setupData;
+    return this.setupData;
   }
 
-  // rarely use class/static methods
+  // Class/static methods are rarely used, but here for demonstration.
 }
 
-
 /*
-The method to create new objects 
-must be called constructor.
-
-Class keyword creates a const, 
-so it can't be redefined.
-
-The class is just a pattern.
-The new keyword calls the constructor behind the scenes,
-to create the new instance of the class.
-
-JS isn't really OOP.
-It syntatic sugar, but helps to organize code.
-
-Just defining the class won't do anything.
-We need to instantiate the class 
-to create a new instance.
-
-this keyword refers to the instance of the class.
-
-Instance methods:
-Methods that the instance of the class can access.
-They provide functionality to a instance.
-
-Class /Static Methods:
-Methods that can be called directly on the class
-and does not need an instance.
-Cannot be called thru an instance.
-Used to create utility methods for a class.
-Not related to the particular instance.
-
-Uses static keyword.
+Explanation of class usage and concepts:
+- The new keyword is used to instantiate a class and call its constructor.
+- The this keyword refers to the instance of the class.
+- Instance methods provide functionality to instances of the class.
+- Class/static methods can be called directly on the class and are not related to a specific instance.
+- JS's class syntax is syntactic sugar for prototypal inheritance and helps organize code.
 */
