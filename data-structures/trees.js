@@ -1,54 +1,62 @@
 // Trees
 // implement a binary search tree
 
-// Note: self balancing trees can be
+// Note: self-balancing trees can be
 // implemented with AVL trees
 
 class Node {
+  // Node class represents a node in the binary search tree
   constructor(data, left, right){
-    this.data = data;
-    this.left = left;
-    this.right = right;
+    this.data = data;   // Data stored in the node
+    this.left = left;   // Reference to the left child node
+    this.right = right; // Reference to the right child node
   }
 }
 
 class BinarySearchTree {
+  // BinarySearchTree class represents the binary search tree
   constructor() {
-    this.root = null;  // only one important property
+    this.root = null;  // The root is the only important property
   }
 
   // O(log(n)) - base 2 - not guaranteed
-  insert(data, prevNode) {      // recursive solution
-    let node = new Node(data);  // create new data
-    let currentNode = prevNode === undefined ? this.root : prevNode; // no prevNode? Start at root. 
-    let dir;                    // set direction, either left or right
+  insert(data, prevNode) {
+    // Insert a new node with the given data into the binary search tree
+    let node = new Node(data);  // Create a new node with the provided data
+    let currentNode = prevNode === undefined ? this.root : prevNode; // If no previous node, start from the root
+    let dir; // Set direction, either left or right
 
-    if (this.root === null) {  // if no root, set to root
-      this.root = node;        // set node
-      return this;             // return this
+    if (this.root === null) {  // If no root, set the new node as the root
+      this.root = node;
+      return this;
     } 
+
+    // Determine the direction to traverse based on the comparison of data
     dir = node.data < currentNode.data ? 'right' : 'left';
-    if (currentNode[dir]) {                 // check if direction exists
-      currentNode = currentNode[dir];      // update currentNode to direction
-      return this.insert(node.data, currentNode);   // recursively call again                    
+
+    if (currentNode[dir]) {  // Check if the direction (left or right) exists
+      currentNode = currentNode[dir];  // Update currentNode to the direction
+      return this.insert(node.data, currentNode); // Recursively call insert on the next node
     } else {
-      currentNode[dir] = node;             // if direction node doesn't exist, set to node 
+      currentNode[dir] = node;  // If the direction node doesn't exist, set it to the new node
     }
-    return this;  // if no case matches, return BST. handles duplicate numbers
+
+    return this;  // Return the binary search tree
   }
 
   // O(log(n)) - base 2 - not guaranteed
-  find(data, prevNode) {  // find and return node, else -1
-    if (this.root === null) {  // if no root, nothing to search
+  find(data, prevNode) {
+    // Find and return the node with the given data, else return false
+    if (this.root === null) {  // If no root, nothing to search
       return false;
     }
 
-    let node = new Node(data);  // create new data
-    let currentNode = prevNode === undefined ? this.root : prevNode; // no prevNode? Start at root. 
+    let node = new Node(data);  // Create a new node with the provided data
+    let currentNode = prevNode === undefined ? this.root : prevNode; // If no previous node, start from the root
     let dir; 
 
     dir = node.data < currentNode.data ? 'right' : 'left';
-    
+
     if (this.root.data === data) {
       console.log('FOUND IN ROOT');
       return this.root;
@@ -59,15 +67,16 @@ class BinarySearchTree {
         console.log('FOUND DATA', currentNode[dir].data);
         return currentNode[dir];
       } else {
-        currentNode = currentNode[dir];      // update currentNode to direction
-        return this.find(node.data, currentNode);   // recursively call again   
+        currentNode = currentNode[dir];  // Update currentNode to the direction
+        return this.find(node.data, currentNode); // Recursively call find on the next node
       }
     }
 
-    return false;  // if no conditions met, not found, return false
+    return false;  // If no conditions met, not found, return false
   }
 
-  contains(data) {  // checks to see if data exists
+  contains(data) {
+    // Checks if the data exists in the binary search tree
     if(this.root === undefined) return undefined;
     let current = this.root,
         found = false;
@@ -80,32 +89,38 @@ class BinarySearchTree {
         return true;
       }
     }
-      return false;
+    return false;
   }
 
   getTree() {
+    // Returns the entire binary search tree
     return this;
   }
 
   getRoot() {
+    // Returns the root node of the binary search tree
     return this.root;
   }
+
   showTree() {
+    // Displays the entire binary search tree
     console.log(this.getTree());
   }
 
   showRoot() {
+    // Displays the root node of the binary search tree
     console.log(this.getRoot());
   }
 }
 
+// Example usage of BinarySearchTree
 const newBST = new BinarySearchTree();
 newBST.insert(10);
 newBST.insert(11);
 newBST.insert(7);
 newBST.insert(2);
 
-let test = newBST.remove(11);
+let test = newBST.remove(11); // It seems there's no 'remove' method, so 'test' will be undefined
 console.log(test);
 
 newBST.showTree();
